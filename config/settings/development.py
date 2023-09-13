@@ -7,7 +7,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 ALLOWED_HOSTS = env.str("ALLOWED_HOSTS", default="").split(" ")
 DEBUG = env.bool("DEBUG", default=False)
 
-# CART_SESSION_ID = 'cart'
+CART_SESSION_ID = 'cart'
 
 LOCAL_APPS = [
     'api.apps.ApiConfig',

@@ -3,7 +3,6 @@ from rest_framework import serializers
 from common.serializers.mixins import ListModelSerializersMixin, \
     ExtendModelSerializers
 from shop.models import Product
-from shop.utilities.utilit_serializers import getting_link
 
 
 class ProductsListSerializers(ListModelSerializersMixin):
@@ -16,6 +15,8 @@ class ProductsListSerializers(ListModelSerializersMixin):
 
 class ProductRetrieveSerializer(ExtendModelSerializers):
     category = serializers.SerializerMethodField()
+    price = serializers.DecimalField(max_digits=10, decimal_places=2,
+                                     coerce_to_string=True)
 
     class Meta:
         model = Product
@@ -24,12 +25,21 @@ class ProductRetrieveSerializer(ExtendModelSerializers):
         ]
 
     def get_category(self, obj):
-        request = self.context.get('request')
-        current_url = request.build_absolute_uri()
-        new_path = f"/api/shop/categories/{obj.category.slug}/"
-        url = getting_link(current_url, new_path)
         context = {
             'name': obj.category.name,
-            'slug': url
+            'slug': obj.category.slug
         }
         return context
+
+
+class ProductAddInCartSerializers(serializers.Serializer):
+    quantity = serializers.CharField(max_length=2,
+                                     help_text="Кол-во товара [1...20]")
+    override = serializers.HiddenField(default=False, initial=False)
+
+    def validate_quantity(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError('Необходимо ввести число')
+        if value < 0 or value > 20:
+            raise serializers.ValidationError("Проверьте диапазон. [1...20]")
+        return value

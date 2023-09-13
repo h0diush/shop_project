@@ -20,8 +20,6 @@ class CategoryRetrieveSerializers(ExtendModelSerializers):
         fields = ['name', 'products']
 
     def get_products(self, obj):
-        # TODO отображение ссылки
         products = Product.objects.filter(category=obj).select_related(
             'category')
-        return ProductsListSerializers(products, many=True, context={
-            'request': self.context['request']}).data
+        return ProductsListSerializers(products, many=True).data

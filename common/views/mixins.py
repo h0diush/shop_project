@@ -6,7 +6,7 @@ class ExtendGeneralViewSet(GenericViewSet):
     pass
 
 
-class ListRetrieveViewSetMixin(GenericViewSet, mixins.ListModelMixin,
+class ListRetrieveViewSetMixin(ExtendGeneralViewSet, mixins.ListModelMixin,
                                mixins.RetrieveModelMixin):
     list_serializers = None
     retrieve_serializers = None
