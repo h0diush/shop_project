@@ -1,12 +1,12 @@
-from django.test import TestCase
 from rest_framework.test import APIClient
 
+from common.tests.mixins import TestMixin
 from shop.models import Category, Product
 from shop.serializers.categories import CategoriesListSerializers, \
     CategoryRetrieveSerializers
 
 
-class ShopTest(TestCase):
+class ShopTest(TestMixin):
 
     def setUp(self) -> None:
         self.client = APIClient()
@@ -41,6 +41,5 @@ class ShopTest(TestCase):
         response = self.client.get(
             f'/api/shop/categories/{self.category_data["slug"]}/')
         self.assertEqual(response.status_code, 200)
-        expected_data = CategoryRetrieveSerializers(
-            Category.objects.get(name=self.category_data['name'])).data
+        expected_data = CategoryRetrieveSerializers(self.product).data
         self.assertEqual(response.data, expected_data)

@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
@@ -37,7 +38,8 @@ class ProductsListView(ListRetrieveViewSetMixin):
                 quantity=quantity,
                 override_quantity=override,
             )
-        return Response({"message": f'{product.name} добавлен в корзину'})
+        return Response({"message": f'{product.name} добавлен в корзину'},
+                        status=status.HTTP_200_OK)
 
     @action(
         detail=True,
@@ -48,4 +50,5 @@ class ProductsListView(ListRetrieveViewSetMixin):
         cart = Cart(request)
         cart.remove(self.get_object())
         return Response(
-            {'message': f'{self.get_object().name} удален из корзины'})
+            {'message': f'{self.get_object().name} удален из корзины'},
+            status=status.HTTP_200_OK)

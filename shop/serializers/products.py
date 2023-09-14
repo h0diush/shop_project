@@ -43,3 +43,5 @@ class ProductAddInCartSerializers(serializers.Serializer):
         if value < 0 or value > 20:
             raise serializers.ValidationError("Проверьте диапазон. [1...20]")
         return value
+
+    # TODO доделать сериализатор метод validate_quantity

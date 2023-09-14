@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -18,11 +19,12 @@ class CartDetailView(APIView):
             end_price['end_price'] += item['total_price']
         context = {'items': serialized_cart_data}
         context.update(end_price)
-        return Response(context)
+        return Response(context, status=status.HTTP_200_OK)
 
 
 class CartClearView(APIView):
     def get(self, request, *args, **kwargs):
         cart = Cart(request)
         cart.clear()
-        return Response({'message': "Корзина очищена"})
+        return Response({'message': "Корзина очищена"},
+                        status=status.HTTP_200_OK)
