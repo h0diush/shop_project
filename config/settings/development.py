@@ -13,7 +13,7 @@ LOCAL_APPS = [
     'api.apps.ApiConfig',
     'cart.apps.CartConfig',
     'common.apps.CommonConfig',
-    # 'orders.apps.OrdersConfig',
+    'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',
     'shop.apps.ShopConfig',
 ]
