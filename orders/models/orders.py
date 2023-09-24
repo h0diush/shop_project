@@ -10,6 +10,7 @@ class Order(models.Model):
     address = models.CharField("Адрес", max_length=255)
     postal_code = models.CharField("Индекс", max_length=20)
     city = models.CharField("Город", max_length=75)
+    paid = models.BooleanField("Оплачено", default=False)
     created = models.DateTimeField("Создано", auto_now_add=True)
     updated = models.DateTimeField("Изменено", auto_now=True)
 
@@ -35,7 +36,7 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField("Количество", default=1)
 
     def __str__(self):
-        return self.pk
+        return f"{self.pk}"
 
     def get_cost(self):
         return self.price * self.quantity
