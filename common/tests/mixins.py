@@ -26,3 +26,11 @@ class TestMixin(TestCase):
         self.product = Product.objects.create(
             **self.product_data
         )
+        self.order_data = {
+            "first_name": "Aid",
+            "last_name": "Jack",
+            "email": "wasca@aww.vc",
+            "address": "Belgian: Tweak Color RED ",
+            "postal_code": "123456",
+            "city": "Brussels"
+        }

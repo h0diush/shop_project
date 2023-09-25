@@ -29,14 +29,15 @@ class ProductsListView(ListRetrieveViewSetMixin):
     )
     def add_product_in_cart(self, request, slug=None):
         cart = Cart(request)
-        quantity = int(request.POST.get('quantity'))
-        override = request.POST.get('override')
+        serializer = ProductAddInCartSerializers(data=request.POST)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.data
         product = self.get_object()
-        if quantity:
+        if data["quantity"]:
             cart.add(
                 product=product,
-                quantity=quantity,
-                override_quantity=override,
+                quantity=int(data["quantity"]),
+                override_quantity=data["override"],
             )
         return Response({"message": f'{product.name} добавлен в корзину'},
                         status=status.HTTP_200_OK)

@@ -34,14 +34,13 @@ class ProductRetrieveSerializer(ExtendModelSerializers):
 
 class ProductAddInCartSerializers(serializers.Serializer):
     quantity = serializers.CharField(max_length=2,
-                                     help_text="Кол-во товара [1...20]")
-    override = serializers.HiddenField(default=False, initial=False)
+                                     help_text="Кол-во товара [1...20]",
+                                     )
+    override = serializers.BooleanField(default=False, initial=False)
 
     def validate_quantity(self, value):
         if not value.isdigit():
             raise serializers.ValidationError('Необходимо ввести число')
-        if value < 0 or value > 20:
+        if int(value) <= 0 or int(value) > 20:
             raise serializers.ValidationError("Проверьте диапазон. [1...20]")
         return value
-
-    # TODO доделать сериализатор метод validate_quantity
