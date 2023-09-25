@@ -1,6 +1,8 @@
+from decimal import Decimal
+
 from common.tests.mixins import TestMixin
 from orders.models import Order, OrderItem
-from decimal import Decimal
+
 
 class TestModel(TestMixin):
 

@@ -21,7 +21,6 @@ class ListRetrieveViewSetMixin(ExtendGeneralViewSet, mixins.ListModelMixin,
             return self.list_serializers
         if self.action == 'retrieve':
             return self.retrieve_serializers
-        super().get_serializer_class()
 
 
 class CartDetailMixin(APIView):

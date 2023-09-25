@@ -34,3 +34,8 @@ class TestMixin(TestCase):
             "postal_code": "123456",
             "city": "Brussels"
         }
+
+        self.cart_data = {
+            'quantity': '3',
+            'override': False
+        }
