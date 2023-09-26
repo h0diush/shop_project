@@ -17,13 +17,11 @@ class TestCart(TestMixin):
 
     def test_add_and_remove_product_in_cart(self):
         response = self._add_product(self.cart_data)
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data,
                          {
                              'message': f'{self.product.name} добавлен в корзину'})
         cart = self.client.get('/api/cart/')
-
         self.assertEqual(cart.status_code, 200)
         end_price_product = round(
             Decimal(self.product.price * int(self.cart_data['quantity'])), 2)
