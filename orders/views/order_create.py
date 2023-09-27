@@ -5,6 +5,7 @@ from cart.cart import Cart
 from common.views.mixins import CartDetailMixin
 from orders.models import OrderItem
 from orders.serializers.orders import OrderCreateSerializer
+from orders.tasks import order_created
 
 
 class OrderCreateView(CartDetailMixin):
@@ -22,5 +23,6 @@ class OrderCreateView(CartDetailMixin):
                 quantity=item['quantity']
             )
         cart.clear()
+        # order_created.delay(order.id) # Отправка писем о совершении покупок
         request.session['order_id'] = order.id
         return Response(serializer.data, status=status.HTTP_201_CREATED)

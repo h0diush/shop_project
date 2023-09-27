@@ -2,7 +2,8 @@ from decimal import Decimal
 
 import stripe
 from django.conf import settings
-from django.shortcuts import redirect
+from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -14,6 +15,18 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
 
 
+@api_view(['GET'])
+def payment_completed(request):
+    return Response({"message": "Оплата прошла успешно"},
+                    status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def payment_canceled(request):
+    return Response({"message": "Оплата прошла успешно"},
+                    status=status.HTTP_402_PAYMENT_REQUIRED)
+
+
 class PaymentProcessView(APIView):
 
     def _get_order(self, request):
@@ -23,16 +36,16 @@ class PaymentProcessView(APIView):
 
     def get(self, request, *args, **kwargs):
         order = self._get_order(request)
-        order_item = get_object_or_404(OrderItem, order=order)
-        return Response(OrderItemSerializer(order_item).data)
+        order_items = OrderItem.objects.filter(order=order)
+        return Response(OrderItemSerializer(order_items, many=True).data)
 
     def post(self, request, *args, **kwargs):
         order = self._get_order(request)
         session_data = {
             'mode': 'payment',
             'client_reference_id': order.id,
-            'success_url': settings.SITE_URL + '?success=true',
-            'cancel_url': settings.SITE_URL + '?canceled=true',
+            'success_url': settings.SITE_URL + 'api/completed/',
+            'cancel_url': settings.SITE_URL + 'api/canceled/',
             'line_items': []
         }
         for item in order.items.all():
@@ -47,7 +60,7 @@ class PaymentProcessView(APIView):
                 'quantity': item.quantity
             })
         session = stripe.checkout.Session.create(**session_data)
-        # return Response(f'{session.url}')
-        return redirect(session.url, code=303)
+        return Response({'url': session.url}, status=status.HTTP_303_SEE_OTHER)
+        # return redirect(session.url, code=303)
 
 # TODO после оплаты что делать с заказом
