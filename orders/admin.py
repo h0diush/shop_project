@@ -47,8 +47,15 @@ order_stripe_payment.short_description = 'Оплата Stripe'
 
 def order_detail(obj):
     url = reverse('api:admin_order_detail', args=[obj.id])
-    # TODO ошибка NoReverseMatch
     return mark_safe(f'<a href="{url}">Смотреть</a>')
+
+
+def order_pdf(obj):
+    url = reverse('api:admin_order_pdf', args=[obj.id])
+    return mark_safe(f'<a href="{url}">PDF</a>')
+
+
+order_pdf.short_description = 'СЧЕТ'
 
 
 class OrderItemInline(admin.TabularInline):
@@ -60,7 +67,7 @@ class OrderItemInline(admin.TabularInline):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'email', 'address', 'postal_code', 'paid',
                     order_stripe_payment, 'created',
-                    'updated', order_detail]
+                    'updated', order_detail, order_pdf]
     list_filter = ['paid', 'created', 'updated']
     inlines = [OrderItemInline]
     actions = [export_to_csv]
