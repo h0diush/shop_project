@@ -12,6 +12,7 @@ CART_SESSION_ID = 'cart'
 LOCAL_APPS = [
     'api.apps.ApiConfig',
     'cart.apps.CartConfig',
+    'coupons.apps.CouponsConfig',
     'common.apps.CommonConfig',
     'orders.apps.OrdersConfig',
     'payment.apps.PaymentConfig',

@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -15,6 +16,10 @@ class OrderCreateView(CartDetailMixin):
         serializer = OrderCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         order = serializer.save()
+        if cart.coupon:
+            order.coupon = cart.coupon
+            order.discount = cart.coupon.discount
+            order.save()
         for item in cart:
             OrderItem.objects.create(
                 order=order,
@@ -23,6 +28,6 @@ class OrderCreateView(CartDetailMixin):
                 quantity=item['quantity']
             )
         cart.clear()
-        order_created.delay(order.id)  # Отправка писем о совершении покупок
+        # order_created.delay(order.id)  # Отправка писем о совершении покупок
         request.session['order_id'] = order.id
         return Response(serializer.data, status=status.HTTP_201_CREATED)

@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from common.serializers.mixins import ExtendModelSerializers
 from orders.models import Order, OrderItem
+from shop.serializers.products import ProductRetrieveSerializer
 
 
 class OrderCreateSerializer(ExtendModelSerializers):
@@ -14,7 +15,7 @@ class OrderCreateSerializer(ExtendModelSerializers):
 
 
 class OrderItemSerializer(ExtendModelSerializers):
-    product = serializers.CharField(source='product.name')
+    product = ProductRetrieveSerializer()
 
     class Meta:
         model = OrderItem
