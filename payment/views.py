@@ -39,8 +39,13 @@ class PaymentProcessView(APIView):
         order_items = OrderItem.objects.filter(order=order)
         data = {}
         data.update(
-            {"product": OrderItemSerializer(order_items, many=True).data})
-        return Response(data)
+            {"products": OrderItemSerializer(order_items, many=True).data,
+             'discount': order.discount,
+             "total_price": order.get_total_cost()
+             }
+        )
+
+        return Response(data, status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         order = self._get_order(request)
@@ -74,5 +79,3 @@ class PaymentProcessView(APIView):
         session = stripe.checkout.Session.create(**session_data)
         return Response({'url': session.url}, status=status.HTTP_303_SEE_OTHER)
         # return redirect(session.url, code=303)
-
-# TODO после оплаты что делать с заказом
