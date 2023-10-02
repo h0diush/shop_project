@@ -27,6 +27,6 @@ class OrderCreateView(CartDetailMixin):
                 quantity=item['quantity']
             )
         cart.clear()
-        # order_created.delay(order.id)  # Отправка писем о совершении покупок
+        order_created.delay(order.id)  # Отправка писем о совершении покупок
         request.session['order_id'] = order.id
         return Response(serializer.data, status=status.HTTP_201_CREATED)

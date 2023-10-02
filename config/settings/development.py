@@ -38,27 +38,19 @@ STRIPE_SECRET_KEY = env.str('STRIPE_SECRET_KEY')
 STRIPE_API_VERSION = env.str('STRIPE_API_VERSION')
 STRIPE_WEBHOOK_SECRET = env.str('STRIPE_WEBHOOK_SECRET')
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": env.str("PG_DATABASE", "postgres"),
-#         "USER": env.str("PG_USER", "postgres"),
-#         "PASSWORD": env.str("PG_PASSWORD", "postgres"),
-#         "HOST": env.str("DB_HOST", "localhost"),
-#         "PORT": env.int("DB_PORT", 5432),
-#     },
-#     "extra": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
-#     },
-# }
-
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, "db.sqlite3"),
-    }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": env.str("PG_DATABASE", "postgres"),
+        "USER": env.str("PG_USER", "postgres"),
+        "PASSWORD": env.str("PG_PASSWORD", "postgres"),
+        "HOST": env.str("DB_HOST", "localhost"),
+        "PORT": env.int("DB_PORT", 5432),
+    },
+    "extra": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+    },
 }
 
 REST_FRAMEWORK = {
