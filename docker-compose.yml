@@ -8,6 +8,9 @@ services:
       POSTGRES_PASSWORD: $PG_PASSWORD
     ports:
       - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
   web:
     build: .
     command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
@@ -15,3 +18,19 @@ services:
       - "8000:8000"
     depends_on:
       - db
+    volumes:
+      - static_value:/code/static/
+  nginx:
+    image: nginx:1.24
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - static_value:/code/static/
+    depends_on:
+      - web
+
+
+volumes:
+  static_value:
+  postgres_data:
