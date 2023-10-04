@@ -2,6 +2,7 @@ version: '3.8'
 services:
   db:
     image: postgres:15.4
+#    command: ["sh", "-c", "chown -R nginx:nginx /code/static/"]
     environment:
       POSTGRES_DB: $PG_DATABASE
       POSTGRES_USER: $PG_USER
