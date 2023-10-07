@@ -22,3 +22,10 @@ restart_nginx:
 
 nginx_bash:
 	docker-compose exec nginx bash
+
+
+superuser:
+	docker-compose exec web python manage.py createsuperuser
+
+data:
+	docker-compose exec web python manage.py loaddata data.json
