@@ -1,3 +1,4 @@
+from api.spectacular.urls import urlpatterns as doc_url
 from cart.urls import urlpatterns as cart_url
 from coupons.urls import urlpatterns as coupon_url
 from orders.urls import urlpatterns as orders_url
@@ -8,6 +9,7 @@ app_name = 'api'
 
 urlpatterns = []
 
+urlpatterns += doc_url
 urlpatterns += cart_url
 urlpatterns += coupon_url
 urlpatterns += orders_url

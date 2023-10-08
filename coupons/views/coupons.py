@@ -1,4 +1,5 @@
 from django.utils import timezone
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -7,8 +8,11 @@ from coupons.models import Coupon
 from coupons.serializers.coupons import CouponSerializer
 
 
+@extend_schema_view(
+    post=extend_schema(summary='Проверка купона', tags=["Купоны"],
+                       request=CouponSerializer, responses=CouponSerializer)
+)
 class CouponView(APIView):
-    # TODO сделать отображение продуктов
 
     def post(self, request, *args, **kwargs):
         now = timezone.now()
@@ -22,7 +26,7 @@ class CouponView(APIView):
                 valid_to__gte=now
             )
             request.session['coupon_id'] = coupon.id
-            return Response({"message": f'Купон {coupon.code} принят'},
+            return Response(CouponSerializer.data,
                             status=status.HTTP_200_OK)
         except Coupon.DoesNotExist:
             request.session['coupon_id'] = None

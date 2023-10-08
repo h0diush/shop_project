@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  title: SHOP PROJECT
+  version: 0.0.1
+  description: Call Helper
+paths:
+  /api/apply/:
+    post:
+      operationId: apply_create
+      tags:
+      - apply
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/canceled/:
+    get:
+      operationId: canceled_retrieve
+      tags:
+      - canceled
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/cart/:
+    get:
+      operationId: cart_retrieve
+      tags:
+      - cart
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/cart_clear/:
+    get:
+      operationId: cart_clear_retrieve
+      tags:
+      - cart_clear
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/completed/:
+    get:
+      operationId: completed_retrieve
+      tags:
+      - completed
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/orders/:
+    get:
+      operationId: orders_retrieve
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: orders_create
+      tags:
+      - orders
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/payment_process/:
+    get:
+      operationId: payment_process_retrieve
+      tags:
+      - payment_process
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: payment_process_create
+      tags:
+      - payment_process
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/schema/:
+    get:
+      operationId: schema_retrieve
+      description: |-
+        OpenApi3 schema for this API. Format can be selected via content negotiation.
+
+        - YAML: application/vnd.oai.openapi
+        - JSON: application/vnd.oai.openapi+json
+      parameters:
+      - in: query
+        name: format
+        schema:
+          type: string
+          enum:
+          - json
+          - yaml
+      - in: query
+        name: lang
+        schema:
+          type: string
+          enum:
+          - af
+          - ar
+          - ar-dz
+          - ast
+          - az
+          - be
+          - bg
+          - bn
+          - br
+          - bs
+          - ca
+          - ckb
+          - cs
+          - cy
+          - da
+          - de
+          - dsb
+          - el
+          - en
+          - en-au
+          - en-gb
+          - eo
+          - es
+          - es-ar
+          - es-co
+          - es-mx
+          - es-ni
+          - es-ve
+          - et
+          - eu
+          - fa
+          - fi
+          - fr
+          - fy
+          - ga
+          - gd
+          - gl
+          - he
+          - hi
+          - hr
+          - hsb
+          - hu
+          - hy
+          - ia
+          - id
+          - ig
+          - io
+          - is
+          - it
+          - ja
+          - ka
+          - kab
+          - kk
+          - km
+          - kn
+          - ko
+          - ky
+          - lb
+          - lt
+          - lv
+          - mk
+          - ml
+          - mn
+          - mr
+          - ms
+          - my
+          - nb
+          - ne
+          - nl
+          - nn
+          - os
+          - pa
+          - pl
+          - pt
+          - pt-br
+          - ro
+          - ru
+          - sk
+          - sl
+          - sq
+          - sr
+          - sr-latn
+          - sv
+          - sw
+          - ta
+          - te
+          - tg
+          - th
+          - tk
+          - tr
+          - tt
+          - udm
+          - uk
+          - ur
+          - uz
+          - vi
+          - zh-hans
+          - zh-hant
+      tags:
+      - schema
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/vnd.oai.openapi:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/yaml:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/vnd.oai.openapi+json:
+              schema:
+                type: object
+                additionalProperties: {}
+            application/json:
+              schema:
+                type: object
+                additionalProperties: {}
+          description: ''
+  /api/shop/categories/:
+    get:
+      operationId: shop_categories_list
+      summary: Список категорий
+      tags:
+      - Магазин
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CategoriesListSerializers'
+          description: ''
+  /api/shop/categories/{slug}/:
+    get:
+      operationId: shop_categories_retrieve
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Ссылка
+        required: true
+      tags:
+      - shop
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryRetrieveSerializers'
+          description: ''
+  /api/shop/products/:
+    get:
+      operationId: shop_products_list
+      tags:
+      - shop
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProductsListSerializers'
+          description: ''
+  /api/shop/products/{slug}/:
+    get:
+      operationId: shop_products_retrieve
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Ссылка
+        required: true
+      tags:
+      - shop
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductRetrieve'
+          description: ''
+  /api/shop/products/{slug}/add_product_in_cart/:
+    post:
+      operationId: shop_products_add_product_in_cart_create
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Ссылка
+        required: true
+      tags:
+      - shop
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductAddInCartSerializers'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductAddInCartSerializers'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductAddInCartSerializers'
+          '*/*':
+            schema:
+              $ref: '#/components/schemas/ProductAddInCartSerializers'
+        required: true
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductAddInCartSerializers'
+          description: ''
+  /api/shop/products/{slug}/remove_product_from_cart/:
+    get:
+      operationId: shop_products_remove_product_from_cart_retrieve
+      parameters:
+      - in: path
+        name: slug
+        schema:
+          type: string
+          title: Ссылка
+        required: true
+      tags:
+      - shop
+      security:
+      - jwtAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    CategoriesListSerializers:
+      type: object
+      description: Миксин сериализатора
+      properties:
+        name:
+          type: string
+          title: Название
+          maxLength: 55
+        slug:
+          type: string
+          title: Ссылка
+          maxLength: 55
+          pattern: ^[-a-zA-Z0-9_]+$
+      required:
+      - name
+      - slug
+    CategoryRetrieveSerializers:
+      type: object
+      description: Миксин сериализатора
+      properties:
+        name:
+          type: string
+          title: Название
+          maxLength: 55
+        products:
+          type: string
+          readOnly: true
+      required:
+      - name
+      - products
+    ProductAddInCartSerializers:
+      type: object
+      properties:
+        quantity:
+          type: string
+          description: Кол-во товара [1...20]
+          maxLength: 2
+        override:
+          type: boolean
+          default: false
+      required:
+      - quantity
+    ProductRetrieve:
+      type: object
+      description: Миксин сериализатора
+      properties:
+        name:
+          type: string
+          title: Название
+          maxLength: 155
+        description:
+          type: string
+          title: Описание
+        category:
+          type: string
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+        available:
+          type: boolean
+          title: В наличии
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+          title: Создано
+      required:
+      - category
+      - created
+      - description
+      - name
+      - price
+    ProductsListSerializers:
+      type: object
+      description: Миксин сериализатора
+      properties:
+        name:
+          type: string
+          title: Название
+          maxLength: 155
+        description:
+          type: string
+          title: Описание
+        slug:
+          type: string
+          title: Ссылка
+          maxLength: 155
+          pattern: ^[-a-zA-Z0-9_]+$
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,2})?$
+          title: Цена
+        available:
+          type: boolean
+          title: В наличии
+        category:
+          type: integer
+          title: Категория
+      required:
+      - category
+      - description
+      - name
+      - price
+      - slug
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

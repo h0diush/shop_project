@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework import status
 from rest_framework.response import Response
 
@@ -8,8 +9,17 @@ from orders.serializers.orders import OrderCreateSerializer
 from orders.tasks import order_created
 
 
+@extend_schema_view(
+    get=extend_schema(summary='Получить заказ', tags=["Заказы"]),
+    post=extend_schema(summary='Создать заказ', tags=["Заказы"])
+)
 class OrderCreateView(CartDetailMixin):
 
+    @extend_schema(
+        request=OrderCreateSerializer,
+        responses={201: OrderCreateSerializer.data},
+        methods=["POST"]
+    )
     def post(self, request, *args, **kwargs):
         cart = Cart(request)
         serializer = OrderCreateSerializer(data=request.data)

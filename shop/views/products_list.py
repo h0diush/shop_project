@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
@@ -10,6 +11,18 @@ from shop.serializers.products import ProductsListSerializers, \
     ProductRetrieveSerializer, ProductAddInCartSerializers
 
 
+@extend_schema_view(
+    list=extend_schema(summary="Список продуктов", tags=["Магазин"],
+                       responses=ProductsListSerializers),
+    retrieve=extend_schema(summary="Продукт", tags=["Магазин"],
+                           responses=ProductRetrieveSerializer),
+    add_product_in_cart=extend_schema(summary="Добавить продукт в корзину",
+                                      tags=["Магазин"],
+                                      request=ProductAddInCartSerializers),
+    remove_product_from_cart=extend_schema(
+        summary="Удалить продукт из корзины",
+        tags=["Магазин"]),
+)
 class ProductsListView(ListRetrieveViewSetMixin):
     queryset = Product.objects.all()
     list_serializers = ProductsListSerializers

@@ -2,6 +2,7 @@ from decimal import Decimal
 
 import stripe
 from django.conf import settings
+from drf_spectacular.utils import extend_schema_view, extend_schema
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.generics import get_object_or_404
@@ -15,18 +16,28 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
 
 
+@extend_schema_view(
+    get=extend_schema(summary='Оплата прошла успешно', tags=["Оплата"])
+)
 @api_view(['GET'])
 def payment_completed(request):
     return Response({"message": "Оплата прошла успешно"},
                     status=status.HTTP_200_OK)
 
 
+@extend_schema_view(
+    get=extend_schema(summary='Оплата не прошла', tags=["Оплата"])
+)
 @api_view(['GET'])
 def payment_canceled(request):
     return Response({"message": "Оплата прошла успешно"},
                     status=status.HTTP_402_PAYMENT_REQUIRED)
 
 
+@extend_schema_view(
+    get=extend_schema(summary='Просмотр заказа', tags=["Оплата"]),
+    post=extend_schema(summary='Оплата заказа', tags=["Оплата"])
+)
 class PaymentProcessView(APIView):
 
     def _get_order(self, request):
