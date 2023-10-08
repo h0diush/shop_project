@@ -1,6 +1,10 @@
+import datetime as dt
+
+import pytz
 from django.test import TestCase
 from rest_framework.test import APIClient
 
+from coupons.models import Coupon
 from shop.models import Product, Category
 
 
@@ -39,3 +43,12 @@ class TestMixin(TestCase):
             'quantity': '3',
             'override': False
         }
+
+        self.coupon_data = {
+            "code": "QWERTY",
+            "valid_from": dt.datetime(2023, 10, 8, 8, 0, 0, 127325, tzinfo=pytz.UTC),
+            "valid_to": dt.datetime(2023, 12, 8, 8, 0, 0, 127325, tzinfo=pytz.UTC),
+            'discount': 25,
+            "active": True
+        }
+        self.coupon = Coupon.objects.create(**self.coupon_data)

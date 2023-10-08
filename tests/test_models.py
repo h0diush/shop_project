@@ -34,3 +34,6 @@ class TestModel(TestMixin):
         self.assertEqual(str(order_item), str(order_item.pk))
         result = order_item_data['price'] * order_item_data['quantity']
         self.assertEqual(order_item.get_cost(), result)
+
+    def test_model_coupon(self):
+        self.assertEqual(str(self.coupon), self.coupon_data['code'])
