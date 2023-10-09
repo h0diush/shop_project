@@ -6,6 +6,8 @@ from shop.models import Product
 
 
 class ProductsListSerializers(ListModelSerializersMixin):
+    category = serializers.CharField(read_only=True)
+
     class Meta:
         model = Product
         fields = [
@@ -44,3 +46,11 @@ class ProductAddInCartSerializers(serializers.Serializer):
         if int(value) <= 0 or int(value) > 20:
             raise serializers.ValidationError("Проверьте диапазон. [1...20]")
         return value
+
+
+class ResponseProductSerializer(ExtendModelSerializers):
+    class Meta:
+        model = Product
+        fields = [
+            'id', 'name', 'price', 'slug'
+        ]

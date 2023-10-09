@@ -1,5 +1,6 @@
-from rest_framework.permissions import AllowAny
 from drf_spectacular.utils import extend_schema_view, extend_schema
+from rest_framework.permissions import AllowAny
+
 from common.views.mixins import ListRetrieveViewSetMixin
 from shop.models import Category
 from shop.serializers.categories import CategoriesListSerializers, \
@@ -7,8 +8,10 @@ from shop.serializers.categories import CategoriesListSerializers, \
 
 
 @extend_schema_view(
-    list=extend_schema(summary="Список категорий", tags=["Магазин"]),
-    retrieve=extend_schema(summary="Категория", tags=["Магазин"]),
+    list=extend_schema(summary="Список категорий", tags=["Магазин"],
+                       responses=CategoriesListSerializers),
+    retrieve=extend_schema(summary="Категория", tags=["Магазин"],
+                           responses=CategoryRetrieveSerializers),
 )
 class CategoryListRetrieveViewSet(ListRetrieveViewSetMixin):
     queryset = Category.objects.all()

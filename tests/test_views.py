@@ -3,7 +3,8 @@ from decimal import Decimal
 from cart.serializers.products import ProductsInCartSerializer
 from common.tests.mixins import TestMixin
 from orders.models import Order
-from shop.serializers.products import ProductAddInCartSerializers
+from shop.serializers.products import ProductAddInCartSerializers, \
+    ResponseProductSerializer
 
 
 class TestCart(TestMixin):
@@ -24,8 +25,7 @@ class TestCart(TestMixin):
         response = self._add_product(self.cart_data)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data,
-                         {
-                             'message': f'{self.product.name} добавлен в корзину'})
+                         ResponseProductSerializer(self.product).data)
         cart = self.client.get('/api/cart/')
         self.assertEqual(cart.status_code, 200)
         end_price_product = round(
@@ -63,9 +63,13 @@ class TestCart(TestMixin):
         orders = Order.objects.all()
         self.assertEqual(orders[0].coupon.code, self.coupon.code)
         self.assertEqual(orders[0].discount, self.coupon.discount)
-        self.assertEqual(orders[0].get_discount(), orders[0].get_total_cost_before_discount() / 4)
+        self.assertEqual(
+            orders[0].get_discount(),
+            orders[0].get_total_cost_before_discount() / 4
+        )
         self.assertEqual(orders[0].get_total_cost(),
-                         orders[0].get_total_cost_before_discount() - orders[0].get_discount())
+                         orders[0].get_total_cost_before_discount() - orders[
+                             0].get_discount())
         self.assertEqual(orders[0].get_stripe_url(), '')
         self.assertEqual(len(orders), 1)
         self.assertEqual(len(orders[0].items.all()), 1)

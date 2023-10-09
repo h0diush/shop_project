@@ -1,6 +1,7 @@
 import datetime as dt
 
 import pytz
+from django.contrib.auth import get_user_model
 from django.test import TestCase
 from rest_framework.test import APIClient
 
@@ -46,9 +47,11 @@ class TestMixin(TestCase):
 
         self.coupon_data = {
             "code": "QWERTY",
-            "valid_from": dt.datetime(2023, 10, 8, 8, 0, 0, 127325, tzinfo=pytz.UTC),
-            "valid_to": dt.datetime(2023, 12, 8, 8, 0, 0, 127325, tzinfo=pytz.UTC),
+            "valid_from": dt.datetime(
+                2023, 10, 8, 8, 0, 0, 127325, tzinfo=pytz.UTC
+            ),
+            "valid_to": dt.datetime(2023, 12, 8, 8, 0, 0, 127325,
+                                    tzinfo=pytz.UTC),
             'discount': 25,
             "active": True
         }
-        self.coupon = Coupon.objects.create(**self.coupon_data)

@@ -11,6 +11,8 @@ from rest_framework.views import APIView
 
 from orders.models import Order, OrderItem
 from orders.serializers.orders import OrderItemSerializer
+from payment.serialziers import ResponseUrlSerializer, \
+    ResponseProductInfoSerializer
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 stripe.api_version = settings.STRIPE_API_VERSION
@@ -35,8 +37,10 @@ def payment_canceled(request):
 
 
 @extend_schema_view(
-    get=extend_schema(summary='Просмотр заказа', tags=["Оплата"]),
-    post=extend_schema(summary='Оплата заказа', tags=["Оплата"])
+    get=extend_schema(summary='Просмотр заказа', tags=["Оплата"],
+                      responses=ResponseProductInfoSerializer),
+    post=extend_schema(summary='Оплата заказа', tags=["Оплата"],
+                       responses=ResponseUrlSerializer)
 )
 class PaymentProcessView(APIView):
 
@@ -56,7 +60,8 @@ class PaymentProcessView(APIView):
              }
         )
 
-        return Response(data, status.HTTP_200_OK)
+        return Response(ResponseProductInfoSerializer(order).data,
+                        status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         order = self._get_order(request)
@@ -88,5 +93,6 @@ class PaymentProcessView(APIView):
                     'coupon': stripe_coupon.id
                 }]
         session = stripe.checkout.Session.create(**session_data)
-        return Response({'url': session.url}, status=status.HTTP_303_SEE_OTHER)
+        return Response(ResponseUrlSerializer({'url': session.url}).data,
+                        status=status.HTTP_303_SEE_OTHER)
         # return redirect(session.url, code=303)

@@ -26,7 +26,7 @@ class CouponView(APIView):
                 valid_to__gte=now
             )
             request.session['coupon_id'] = coupon.id
-            return Response(CouponSerializer.data,
+            return Response(CouponSerializer(coupon).data,
                             status=status.HTTP_200_OK)
         except Coupon.DoesNotExist:
             request.session['coupon_id'] = None

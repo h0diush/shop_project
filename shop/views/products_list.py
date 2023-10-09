@@ -8,7 +8,8 @@ from cart.cart import Cart
 from common.views.mixins import ListRetrieveViewSetMixin
 from shop.models import Product
 from shop.serializers.products import ProductsListSerializers, \
-    ProductRetrieveSerializer, ProductAddInCartSerializers
+    ProductRetrieveSerializer, ProductAddInCartSerializers, \
+    ResponseProductSerializer
 
 
 @extend_schema_view(
@@ -18,17 +19,20 @@ from shop.serializers.products import ProductsListSerializers, \
                            responses=ProductRetrieveSerializer),
     add_product_in_cart=extend_schema(summary="Добавить продукт в корзину",
                                       tags=["Магазин"],
-                                      request=ProductAddInCartSerializers),
+                                      request=ProductAddInCartSerializers,
+                                      responses=ResponseProductSerializer),
     remove_product_from_cart=extend_schema(
         summary="Удалить продукт из корзины",
         tags=["Магазин"]),
 )
 class ProductsListView(ListRetrieveViewSetMixin):
-    queryset = Product.objects.all()
     list_serializers = ProductsListSerializers
     retrieve_serializers = ProductRetrieveSerializer
     permission_classes = [AllowAny]
     lookup_field = 'slug'
+
+    def get_queryset(self):
+        return Product.objects.all()
 
     def get_serializer_class(self):
         if self.action == 'add_product_in_cart':
@@ -52,7 +56,7 @@ class ProductsListView(ListRetrieveViewSetMixin):
                 quantity=int(data["quantity"]),
                 override_quantity=data["override"],
             )
-        return Response({"message": f'{product.name} добавлен в корзину'},
+        return Response(ResponseProductSerializer(product).data,
                         status=status.HTTP_200_OK)
 
     @action(
@@ -64,5 +68,5 @@ class ProductsListView(ListRetrieveViewSetMixin):
         cart = Cart(request)
         cart.remove(self.get_object())
         return Response(
-            {'message': f'{self.get_object().name} удален из корзины'},
+            ResponseProductSerializer(self.get_object()).data,
             status=status.HTTP_200_OK)
