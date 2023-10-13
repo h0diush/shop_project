@@ -1,0 +1,59 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:15.4
+    environment:
+      POSTGRES_DB: ${PG_DATABASE}
+      POSTGRES_USER: ${PG_USER}
+      POSTGRES_PASSWORD: ${PG_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  web:
+    image: h0diush/shop_project
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    volumes:
+      - static_value:/code/static/
+    command:
+      - /start.sh
+  nginx:
+    image: nginx:1.24
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_value:/code/static/
+    depends_on:
+      - web
+  stripe:
+    image: "stripe/stripe-cli:latest"
+    network_mode: host
+    environment:
+      STRIPE_API_KEY: ${STRIPE_SECRET_KEY}
+      STRIPE_DEVICE_NAME: ${STRIPE_DEVICE_NAME}
+    command:
+      listen --forward-to localhost:8000/api/webhook/
+    depends_on:
+      - web
+  redis:
+    image: redis:latest
+    container_name: redis
+  celery:
+    restart: always
+    build:
+      context: .
+    command: celery -A config worker -l DEBUG
+    volumes:
+      - .:/code
+    depends_on:
+      - db
+      - redis
+      - web
+volumes:
+  static_value:
+  postgres_data:
