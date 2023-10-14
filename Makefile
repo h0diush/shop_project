@@ -1,7 +1,7 @@
 ifneq (,$(wildcard ./.env))
 	include .env
 	export
-	ENV_FILE_PARAM = --env-file .env
+	ENV_FILE_PARAM = --env-file .env_dev
 endif
 
 migrate:
