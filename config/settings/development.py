@@ -1,5 +1,3 @@
-from datetime import timedelta
-
 from .base import *
 
 SECRET_KEY = env.str("SECRET_KEY")
