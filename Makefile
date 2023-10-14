@@ -12,10 +12,10 @@ static:
 	docker-compose exec web python manage.py collectstatic --no-input
 
 run:
-	docker-compose up -d --build
+	docker-compose -f docker-compose.dev.yml up -d --build
 
 stop:
-	docker-compose down -v
+	docker-compose -f docker-compose.dev.yml down -v
 
 restart_nginx:
 	docker-compose restart nginx

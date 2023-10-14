@@ -12,7 +12,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
 
   web:
-    image: h0diush/shop_project
+    image: h0diush/shop:0.1.0
     ports:
       - "8000:8000"
     depends_on:
@@ -21,6 +21,8 @@ services:
       - static_value:/code/static/
     command:
       - /start.sh
+    env_file:
+      - ./.env_dev
   nginx:
     image: nginx:1.24
     ports:
