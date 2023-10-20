@@ -29,3 +29,6 @@ superuser:
 
 data:
 	docker-compose exec web python manage.py loaddata data.json
+
+test:
+	pytest
