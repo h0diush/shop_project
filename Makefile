@@ -1,7 +1,7 @@
-ifneq (,$(wildcard ./.env_dev))
-	include .env_dev
+ifneq (,$(wildcard ./.env))
+	include .env
 	export
-	ENV_FILE_PARAM = --env-file .env_dev
+	ENV_FILE_PARAM = --env-file .env
 endif
 
 migrate:
@@ -29,3 +29,6 @@ superuser:
 
 data:
 	docker-compose exec web python manage.py loaddata data.json
+
+test:
+	pytest
